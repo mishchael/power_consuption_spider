@@ -1,0 +1,100 @@
+******************************************
+papr2 : 6543.62						#峰止度
+datadate : 2018-03-01				1#日期
+papr1 : 2331.77						#尖止度
+pape4 : 102.00						#谷电量
+consname : *照龙山机床配件制...		3#用户名称
+rapr : 0.00							#反止度
+pape3 : 272.40						#平电量
+pape2 : 131.20						#峰电量
+pape : 558.00						#总电量
+pape1 : 52.40						#尖电量
+startdate : 
+papr4q : 5683.39					#谷起度
+papr3q : 9806.33					#平起度
+orgname : 两城供电所				4#供电单位
+paprq : 24360.79					#总起度
+papr : 24373.89						#总止度
+raprq : 0.00						#反起度
+papr1q : 2330.56					#尖起度
+papr3 : 9812.25						#平止度
+consno : 0182653487					2#用户编号
+papr2q : 6540.50					#峰起度
+papr4 : 5686.23						#谷止度
+enddate : 
+rape : 0.00							#反电量
+******************************************
+papr2 : 6546.90
+datadate : 2018-03-02
+papr1 : 2333.08
+pape4 : 83.60
+consname : *照龙山机床配件制...
+rapr : 0.00
+pape3 : 188.80
+pape2 : 136.80
+pape : 454.40
+pape1 : 45.20
+startdate : 
+papr4q : 5686.23
+papr3q : 9812.25
+orgname : 两城供电所
+paprq : 24373.89
+papr : 24387.84
+raprq : 0.00
+papr1q : 2331.77
+papr3 : 9819.06
+consno : 0182653487
+papr2q : 6543.62
+papr4 : 5688.78
+enddate : 
+rape : 0.00
+******************************************
+papr2 : 6550.32
+datadate : 2018-03-03
+papr1 : 2334.21
+pape4 : 84.80
+consname : *照龙山机床配件制...
+rapr : 0.00
+pape3 : 176.40
+pape2 : 123.20
+pape : 426.00
+pape1 : 41.60
+startdate : 
+papr4q : 5688.78
+papr3q : 9819.06
+orgname : 两城供电所
+paprq : 24387.84
+papr : 24399.20
+raprq : 0.00
+papr1q : 2333.08
+papr3 : 9823.78
+consno : 0182653487
+papr2q : 6546.90
+papr4 : 5690.87
+enddate : 
+rape : 0.00
+******************************************
+papr2 : 6553.40
+datadate : 2018-03-04
+papr1 : 2335.25
+pape4 : 112.00
+consname : *照龙山机床配件制...
+rapr : 0.00
+pape3 : 200.00
+pape2 : 193.20
+pape : 574.80
+pape1 : 69.60
+startdate : 
+papr4q : 5690.87
+papr3q : 9823.78
+orgname : 两城供电所
+paprq : 24399.20
+papr : 24409.85
+raprq : 0.00
+papr1q : 2334.21
+papr3 : 9828.19
+consno : 0182653487
+papr2q : 6550.32
+papr4 : 5692.99
+enddate : 
+rape : 0.00
