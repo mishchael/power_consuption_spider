@@ -7,3 +7,4 @@ test.py
 *.xls
 *.csv
 datetime_test.py
+*.pyc

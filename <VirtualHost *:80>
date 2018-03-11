@@ -1,0 +1,15 @@
+WSGIPythonPath /Users/michael/Python/projects/flask/venv_flask/lib/python3.6/site-packages/
+<VirtualHost *:80>
+    ServerName www.power.com
+
+    #WSGIDaemonProcess power_consuption user=user1 group=group1 threads=5
+    DocumentRoot /Users/michael/Python/projects/flask/power_consuption
+    WSGIScriptAlias / /Users/michael/Python/projects/flask/power_consuption/myapp.wsgi
+
+    <Directory /Users/michael/Python/projects/flask/power_consuption/>
+       #WSGIProcessGroup myapp
+       #WSGIApplicationGroup %{GLOBAL}
+        Order deny,allow
+        Allow from all
+    </Directory>
+</VirtualHost>
