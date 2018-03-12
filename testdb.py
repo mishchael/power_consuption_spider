@@ -69,7 +69,7 @@ def db_select(sql):
 def get_data():
 	# form_data = request.form
 	# sql = 'SELECT consno,datadate,consnamefull,consarea,pape FROM bus_ydcj_power_consumption WHERE consno = "0182653487"'
-	sql = 'SELECT * FROM bus_ydcj_power_consumption WHERE consno = "0182653487"'
+	sql = 'SELECT * FROM bus_ydcj_power_consumption WHERE consno in ("0182653487","0182824005")'
 	power_data = dbhelper.db_select(sql)
 	data_list = []
 	return_data = {'data': data_list}
@@ -81,7 +81,7 @@ def get_data():
 		row_list.append(row['consarea'])
 		row_list.append(row['pape'])
 		data_list.append(row_list)
-    # print(return_data)
+	print(return_data)
 	return return_data
 
 if __name__ == '__main__':

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>日用电量查询</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link href="" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="static/css/datatables1.5.1.min.css">
+</head>
+
+<body>
+    <div id="main">
+        <table id="example" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>用户编号</th>
+                    <th>日期</th>
+                    <th>用户名</th>
+                    <th>区县</th>
+                    <th>总电量</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>用户编号</th>
+                    <th>日期</th>
+                    <th>用户名</th>
+                    <th>区县</th>
+                    <th>总电量</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <script src="static/js/jquery-1.12.4.min.js"></script>
+    <script src="static/js/jquery.dataTables.min.js"></script>
+    <script src="static/js/datatables1.5.1.min.js"></script>
+    <script src="static/js/pdfmake.min.js"></script>
+    <script src="static/js/vfs_fonts.js"></script>
+    <script>
+    // $(document).ready(function() {
+    //     $.ajax({
+    //             url: '/get_data',
+    //             type: 'GET',
+    //         })
+    //         .done(function(result, status, xhr) {
+    //             $('#example').DataTable({
+    //                 "ajax": result
+    //             });
+    //         });
+    // });
+    $(document).ready(function() {
+        $('#example').DataTable({
+            //显示正在加载
+            "processing": true,
+            //服务器处理
+            "serverSide": true,
+            //开启分页
+            "paging": true,
+            //分页样式
+            "pagingType": "full_numbers",
+            //自定义分页长度
+            "lengthMenu": [
+                [10, 20, 50, 100],
+                ['10', '20', '50', '100']
+            ],
+            //开启排序
+            "ordering": true,
+            //异步请求数据
+            "ajax": {
+                "type": "Post",
+                "url": "/get_data",
+                //"dataType": "json"
+                "data": function(d) {
+                    d.test = "myValue";
+                    // d.custom = $('#myInput').val();
+                    // etc
+                }
+            },
+            //列对应关系
+            "columns": [
+                { "data": "consno" },
+                { "data": "datadate" },
+                { "data": "consnamefull" },
+                { "data": "consarea" },
+                { "data": "pape" }
+            ],
+            //国际化
+            "language": {
+                "sProcessing": "加载中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            // "dom": "Bfrtip"
+            // "buttons": [
+            //     'copy', 'excel', 'pdf'
+            // ]
+        });
+        // var table = $('#example').DataTable();
+
+        // Apply the filter
+        // table.columns().every(function() {
+        //     var column = this;
+
+        //     $('input').on('keyup change', function() {
+        //         column
+        //             .search(this.value)
+        //             .draw();
+        //     });
+        // });
+        // $('input').on('keyup', function() {
+        //     table
+        //         .columns(2)
+        //         .search(this.value)
+        //         .draw();
+        // });
+
+        //     $('#example').DataTable({
+        //     dom: 'Bfrtip',
+        //     buttons: [
+        //         'copy', 'csv', 'excel', 'pdf', 'print'
+        //     ]
+        // });
+        // $('#example').DataTable({
+        //     dom: 'Bfrtip',
+        //     buttons: [{
+        //         extend: 'excel',
+        //         exportOptions: {
+        //             columns: [0, 1, 2, 4]
+        //         }
+        //     }, ]
+        // });
+    });
+    </script>
+</body>
+
+</html>

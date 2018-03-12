@@ -1,6 +1,5 @@
 test.py
 *.sql
-*.html
 *.txt
 *.json
 *.xlsx
