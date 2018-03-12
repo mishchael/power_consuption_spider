@@ -27,6 +27,8 @@ def get_data():
 	#搜索
 	search_value = request.form.get('search[value]')
 
+	search_sql = " and "
+
 	sql = 'SELECT consno,DATE_FORMAT(datadate,"%Y-%m-%d") as datadate,consnamefull,consarea,pape FROM bus_ydcj_power_consumption WHERE consno in ("0182653487","0182824005")'
 	power_data = dbhelper.db_select(sql)
 	
@@ -53,6 +55,30 @@ def get_data():
 @app.route('/datatable')
 def datatable():
 	return render_template('datatable.html')
+
+@app.route('/chart_data', methods = ['GET'])
+def chart_data():
+	sql = 'SELECT consarea,COUNT(pape) as pape FROM bus_ydcj_power_consumption GROUP BY consarea'
+	chart_data = dbhelper.db_select(sql)
+	return_data = {}
+	area_list = []
+	pape_list = []
+	for row in chart_data:
+		area_list.append(row['consarea'])
+		pape_list.append(row['pape'])
+
+	return_data['area'] = area_list
+	return_data['pape'] = pape_list
+
+	return_data = jsonify(return_data)
+	return return_data
+
+
+@app.route('/chart')
+def chart():
+	return render_template('chart.html')
+
+
 
 
 if __name__ == '__main__':
