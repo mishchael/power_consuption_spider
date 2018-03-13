@@ -6,53 +6,325 @@
     <title>ECharts</title>
     <script src="static/js/jquery-1.12.4.min.js"></script>
     <script src="static/js/echarts.min.js"></script>
+    <script src="static/js/theme/walden.js"></script>
+    <script src="static/js/theme/vintage.js"></script>
+    <script src="static/js/theme/macarons.js"></script>
+    <script src="static/js/theme/wonderland.js"></script>
 </head>
 
 <body>
+    <div id="bar" style="width:100%;height:400px;"></div>
+    <div id="calendar_effectscatter" style="width:100%;height:400px;"></div>
     <div id="main" style="width:100%;height:400px;"></div>
     <script type="text/javascript">
-    var myChart = echarts.init(document.getElementById('main'));
-    var area = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    var pape = [120, 200, 150, 80, 70, 110, 130];
-    var data_test;
-
-
-    $.get('/chart_data', function(data) {
+    $.get('/chart_bar_data', function(data) {
         /*optional stuff to do after success */
-        data_test = data;
-        area = data.area;
-        pape = data.pape;
-        var option = {
-            xAxis: {
+        var dom_bar = $('#bar').get(0)
+        var echarts_bar = echarts.init(dom_bar, 'walden')
+        option = {
+            title: {
+                text: '区县总、尖、峰、平、谷电量',
+                subtext: '柱状图和折线图'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['总电量', '尖电量', '峰电量', '平电量', '谷电量']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            calculable: true,
+            xAxis: [{
                 type: 'category',
-                data: area
-            },
-            yAxis: {
+                data: data.area
+            }],
+            yAxis: [{
                 type: 'value'
-            },
+            }],
             series: [{
-                data: pape,
-                type: 'bar'
-            }]
+                    name: '总电量',
+                    type: 'bar',
+                    data: data.pape,
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最大值' },
+                            { type: 'min', name: '最小值' }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                },
+                {
+                    name: '尖电量',
+                    type: 'bar',
+                    data: data.pape1,
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最大值' },
+                            { type: 'min', name: '最小值' }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                },
+                {
+                    name: '峰电量',
+                    type: 'bar',
+                    data: data.pape2,
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最大值' },
+                            { type: 'min', name: '最小值' }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                },
+                {
+                    name: '平电量',
+                    type: 'bar',
+                    data: data.pape3,
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最大值' },
+                            { type: 'min', name: '最小值' }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                },
+                {
+                    name: '谷电量',
+                    type: 'bar',
+                    data: data.pape4,
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最大值' },
+                            { type: 'min', name: '最小值' }
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                }
+            ]
+        };
+        echarts_bar.setOption(option);
+
+    });
+
+    $.get('/chart_cal_effectscatter_data', function(data) {
+        /*optional stuff to do after success */
+        var dom_cal_effectscatter = $('#calendar_effectscatter').get(0)
+        echarts_cal_effectscatter = echarts.init(dom_cal_effectscatter, 'walden')
+
+        option = {
+            // backgroundColor: '#404a59',
+            backgroundColor: '#fff',
+
+            title: {
+                top: 20,
+                text: ' 用户0180825628每日用电量',
+                subtext: '日历特效散点图',
+                left: 'center',
+                textStyle: {
+                    //color: '#fff'
+                    color: '#666666'
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: '30',
+                left: '100',
+                data: ['日电量', 'Top 10'],
+                textStyle: {
+                    //color: '#fff'
+                    color: '#4f5778'
+                }
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: { show: true, readOnly: false },
+                    //magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            calendar: [{
+                    top: 100,
+                    left: 'center',
+                    range: ['2018-01-01', '2018-3-31'],
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#000',
+                            width: 4,
+                            type: 'solid'
+                        }
+                    },
+                    yearLabel: {
+                        formatter: '2018年',
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    },
+                    // yearLabel: {
+                    //     margin: 40
+                    // },
+                    monthLabel: {
+                        nameMap: 'cn',
+                        margin: 10
+                    },
+                    dayLabel: {
+                        firstDay: 7,
+                        nameMap: 'cn',
+                        margin: 10
+                    },
+                    cellSize: 40,
+                    itemStyle: {
+                        normal: {
+                            //color: '#323c48',
+                            color: '#404a59',
+                            borderWidth: 1,
+                            borderColor: '#111'
+                        }
+                    }
+                }
+                // , {
+                //     top: 340,
+                //     left: 'center',
+                //     range: ['2016-07-01', '2016-12-31'],
+                //     splitLine: {
+                //         show: true,
+                //         lineStyle: {
+                //             color: '#000',
+                //             width: 4,
+                //             type: 'solid'
+                //         }
+                //     },
+                //     yearLabel: {
+                //         formatter: '{start}  2nd',
+                //         textStyle: {
+                //             color: '#fff'
+                //         }
+                //     },
+                //     itemStyle: {
+                //         normal: {
+                //             color: '#323c48',
+                //             borderWidth: 1,
+                //             borderColor: '#111'
+                //         }
+                //     }
+                // }
+            ],
+            series: [{
+                    name: '日电量',
+                    type: 'scatter',
+                    coordinateSystem: 'calendar',
+                    data: data,
+                    symbolSize: function(val) {
+                        return val[1] / 80;
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#ddb926'
+                        }
+                    }
+                },
+                // {
+                //     name: '步数',
+                //     type: 'scatter',
+                //     coordinateSystem: 'calendar',
+                //     calendarIndex: 1,
+                //     data: data,
+                //     symbolSize: function(val) {
+                //         return val[1] / 500;
+                //     },
+                //     itemStyle: {
+                //         normal: {
+                //             color: '#ddb926'
+                //         }
+                //     }
+                // },
+                {
+                    name: 'Top 10',
+                    type: 'effectScatter',
+                    coordinateSystem: 'calendar',
+                    //calendarIndex: 1,
+                    data: data.sort(function(a, b) {
+                        return b[1] - a[1];
+                    }).slice(0, 10),
+                    symbolSize: function(val) {
+                        return val[1] / 80;
+                    },
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    hoverAnimation: true,
+                    itemStyle: {
+                        normal: {
+                            color: '#f4e925',
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    zlevel: 1
+                }
+                // ,{
+                //     name: 'Top 12',
+                //     type: 'effectScatter',
+                //     coordinateSystem: 'calendar',
+                //     data: data.sort(function(a, b) {
+                //         return b[1] - a[1];
+                //     }).slice(0, 12),
+                //     symbolSize: function(val) {
+                //         return val[1] / 500;
+                //     },
+                //     showEffectOn: 'render',
+                //     rippleEffect: {
+                //         brushType: 'stroke'
+                //     },
+                //     hoverAnimation: true,
+                //     itemStyle: {
+                //         normal: {
+                //             color: '#f4e925',
+                //             shadowBlur: 10,
+                //             shadowColor: '#333'
+                //         }
+                //     },
+                //     zlevel: 1
+                // }
+            ]
         };
 
-        myChart.setOption(option);
+        echarts_cal_effectscatter.setOption(option);
     });
-    // var option = {
-    //     xAxis: {
-    //         type: 'category',
-    //         data: area
-    //     },
-    //     yAxis: {
-    //         type: 'value'
-    //     },
-    //     series: [{
-    //         data: pape,
-    //         type: 'bar'
-    //     }]
-    // };
-
-    // myChart.setOption(option);
     </script>
 </body>
 

@@ -56,27 +56,95 @@ def get_data():
 def datatable():
 	return render_template('datatable.html')
 
-@app.route('/chart_data', methods = ['GET'])
-def chart_data():
-	sql = 'SELECT consarea,COUNT(pape) as pape FROM bus_ydcj_power_consumption GROUP BY consarea'
+@app.route('/chart_bar_data', methods = ['GET'])
+def chart_bar_data():
+	sql = 'SELECT consarea,SUM(pape) as pape,SUM(pape1) as pape1,SUM(pape2) as pape2,SUM(pape3) as pape3,SUM(pape4) as pape4 FROM bus_ydcj_power_consumption GROUP BY consarea'
 	chart_data = dbhelper.db_select(sql)
 	return_data = {}
 	area_list = []
 	pape_list = []
+	pape1_list = []
+	pape2_list = []
+	pape3_list = []
+	pape4_list = []
 	for row in chart_data:
 		area_list.append(row['consarea'])
-		pape_list.append(row['pape'])
+		pape_list.append(round(row['pape'], 2))
+		pape1_list.append(round(row['pape1'], 2))
+		pape2_list.append(round(row['pape2'], 2))
+		pape3_list.append(round(row['pape3'], 2))
+		pape4_list.append(round(row['pape4'], 2))
 
 	return_data['area'] = area_list
 	return_data['pape'] = pape_list
+	return_data['pape1'] = pape1_list
+	return_data['pape2'] = pape2_list
+	return_data['pape3'] = pape3_list
+	return_data['pape4'] = pape4_list
 
 	return_data = jsonify(return_data)
 	return return_data
+
+@app.route('/chart_cal_effectscatter_data')
+def chart_cal_effectscatter_data():
+	return_data = []
+	sql = 'SELECT DATE_FORMAT(datadate,"%Y-%m-%d") as datadate,pape FROM bus_ydcj_power_consumption WHERE consno = "0180825628"'
+	chart_data = dbhelper.db_select(sql)
+	
+	for row in chart_data:
+		row_list =[]
+		row_list.append(row['datadate'])
+		row_list.append(row['pape'])
+		return_data.append(row_list)
+
+	return_data = jsonify(return_data)
+	return return_data
+		
+@app.route('/chart_tree_data')
+def chart_tree_data():
+	return_data = {}
+	return_data = jsonify(return_data)
+	return return_data
+	# sql = 'SELECT DISTINCT consno,consarea,consnamefull FROM bus_ydcj_power_consumption'
+	# chart_data = dbhelper.db_select(sql)
+	# consarea_dict = {}
+	# consnamefull_dict = {}
+	# children = []
+	# return_data['name'] = '日照市机械铸造企业'
+	# return_data['children'] = children
+	# for row in chart_data:
+	# 	if row['consnamefull'] in consnamefull_dict.keys():
+	# 		consnamefull_dict[row['consnamefull']] = consnamefull_dict[row['consnamefull']].append(row['consno'])
+	# 	else:
+	# 		consnamefull_dict[row['consnamefull']] = list(row['consno'])
+
+	# 	if row['consarea'] in consarea_dict.keys():
+	# 		consarea_dict[row['consarea']] = consarea_dict[row['consarea']].append(row['consnamefull'])
+	# 	else:
+	# 		consarea_dict[row['consarea']] = list(row['consnamefull'])
+
+	# for area,consname in consarea_dict.items():
+	# 	area_tree = {}
+	# 	area_tree['name'] = consname
+	# 	area_tree['children'] = []
+	# 	for name,consno in consnamefull_dict.items():
+	# 		name_tree = {}
+	# 		name_tree['name'] = name
+	# 		name_tree['value'] = list(consno)
+	# 		area_tree['children'].append(name_tree)
+	# 	children.append(area_tree)
+
+	
+
 
 
 @app.route('/chart')
 def chart():
 	return render_template('chart.html')
+
+
+
+
 
 
 
