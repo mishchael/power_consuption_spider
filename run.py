@@ -103,38 +103,39 @@ def chart_cal_effectscatter_data():
 @app.route('/chart_tree_data')
 def chart_tree_data():
 	return_data = {}
+	
+	sql = 'SELECT DISTINCT consno,consarea,consnamefull FROM bus_ydcj_power_consumption'
+	chart_data = dbhelper.db_select(sql)
+	area_name_dict = {}
+	name_no_dict = {}
+	return_data['name'] = '日照市机械铸造企业'
+	return_data['children'] = []
+	for row in chart_data:
+		if row['consarea'] not in area_name_dict.keys():
+			area_name_dict[row['consarea']] = []
+		area_name_dict[row['consarea']].append(row['consnamefull'])
+		if row['consnamefull'] not in name_no_dict.keys():
+			name_no_dict[row['consnamefull']] = []
+		name_no_dict[row['consnamefull']].append(row['consno'])
+	# return_data_children = []
+	for area,name in area_name_dict.items():
+		child_area = {}
+		child_area['name'] = area
+		child_area['children'] = []
+		for name_key,no in name_no_dict.items():
+			if name_key in name:
+				child_name = {}
+				child_name['name'] = name_key
+				child_name['value'] = ''
+				for no_item in no:
+					child_name['value'] = child_name['value'] + '.' + no_item
+				child_name['value'] = child_name['value'][1:]
+				child_area['children'].append(child_name)
+		return_data['children'].append(child_area)
+	
+
 	return_data = jsonify(return_data)
 	return return_data
-	# sql = 'SELECT DISTINCT consno,consarea,consnamefull FROM bus_ydcj_power_consumption'
-	# chart_data = dbhelper.db_select(sql)
-	# consarea_dict = {}
-	# consnamefull_dict = {}
-	# children = []
-	# return_data['name'] = '日照市机械铸造企业'
-	# return_data['children'] = children
-	# for row in chart_data:
-	# 	if row['consnamefull'] in consnamefull_dict.keys():
-	# 		consnamefull_dict[row['consnamefull']] = consnamefull_dict[row['consnamefull']].append(row['consno'])
-	# 	else:
-	# 		consnamefull_dict[row['consnamefull']] = list(row['consno'])
-
-	# 	if row['consarea'] in consarea_dict.keys():
-	# 		consarea_dict[row['consarea']] = consarea_dict[row['consarea']].append(row['consnamefull'])
-	# 	else:
-	# 		consarea_dict[row['consarea']] = list(row['consnamefull'])
-
-	# for area,consname in consarea_dict.items():
-	# 	area_tree = {}
-	# 	area_tree['name'] = consname
-	# 	area_tree['children'] = []
-	# 	for name,consno in consnamefull_dict.items():
-	# 		name_tree = {}
-	# 		name_tree['name'] = name
-	# 		name_tree['value'] = list(consno)
-	# 		area_tree['children'].append(name_tree)
-	# 	children.append(area_tree)
-
-	
 
 
 
