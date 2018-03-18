@@ -191,7 +191,10 @@ def query():
 			sql = sql + '"' + name + '",'
 		sql = sql[:-1] + ')'
 	elif area:
-		sql = 'SELECT consno,DATE_FORMAT(datadate,"%Y-%m-%d") as datadate,consnamefull,consarea,pape,pape1,pape2,pape3,pape4,papr FROM bus_ydcj_power_consumption WHERE consarea ="' + area +'"'
+		if area.replace('"', '') == '全部':
+			sql = 'SELECT consno,DATE_FORMAT(datadate,"%Y-%m-%d") as datadate,consnamefull,consarea,pape,pape1,pape2,pape3,pape4,papr FROM bus_ydcj_power_consumption'
+		else:
+			sql = 'SELECT consno,DATE_FORMAT(datadate,"%Y-%m-%d") as datadate,consnamefull,consarea,pape,pape1,pape2,pape3,pape4,papr FROM bus_ydcj_power_consumption WHERE consarea ="' + area +'"'
 	else:
 		sql = 'SELECT consno,DATE_FORMAT(datadate,"%Y-%m-%d") as datadate,consnamefull,consarea,pape,pape1,pape2,pape3,pape4,papr FROM bus_ydcj_power_consumption WHERE consno in ("0182653487","0182824005")'
 	#搜索条件
