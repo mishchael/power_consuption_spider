@@ -61,6 +61,7 @@ def db_select(sql):
 		print ("Error: unable to fetch data")
 	finally:
 		# print(results)
-		return results
 		# 关闭数据库连接
 		db.close()
+		return results
+		

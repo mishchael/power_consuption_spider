@@ -63,22 +63,26 @@
                                     <div class="p-20">
                                         <div id="select" style="width:100%;border: 1px solid #c8c9ca; padding: 5px;margin:5px;">
                                             <form action="">
-                                                <label for="area">区县:</label>
-                                                <select class="js-example-basic-single" id="area" name="area" style="display: inline-block;padding-right: 10px;">
-                                                    <option>Mustard</option>
-                                                    <option>Ketchup</option>
-                                                    <option>Relish</option>
-                                                </select>
-                                                <label for="consname">用户名称:</label>
-                                                <select class="js-example-basic-multiple" name="consname" multiple="multiple" id="consname">
-                                                    <option value="AL">Alabama</option>
-                                                    <option value="WY">Wyoming</option>
-                                                </select>
-                                                <label for="consno">用户编号:</label>
-                                                <select class="js-example-basic-multiple" name="consno" multiple="multiple" id="consno">
-                                                    <option value="AL">Alabama</option>
-                                                    <option value="WY">Wyoming</option>
-                                                </select>
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <label for="area">区县:</label>
+                                                        <select class="js-example-basic-single" id="sel_area" name="area" style="width: 100px;">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="consname">用户名称:</label>
+                                                        <select class="js-example-basic-multiple" name="sel_consname" multiple="multiple" id="sel_consname" style="width: 240px">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="consno">用户编号:</label>
+                                                        <select class="js-example-basic-multiple" name="sel_consno" multiple="multiple" id="sel_consno" style="width: 260px;">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="button" value="查询" name="btn_query" id="btn_query" style="width: 80px">
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                         <div id="table">
@@ -90,6 +94,11 @@
                                                         <th>用户名</th>
                                                         <th>区县</th>
                                                         <th>总电量</th>
+                                                        <th>尖电量</th>
+                                                        <th>峰电量</th>
+                                                        <th>平电量</th>
+                                                        <th>谷电量</th>
+                                                        <th>反电量</th>
                                                     </tr>
                                                 </thead>
                                                 <tfoot>
@@ -99,6 +108,11 @@
                                                         <th>用户名</th>
                                                         <th>区县</th>
                                                         <th>总电量</th>
+                                                        <th>尖电量</th>
+                                                        <th>峰电量</th>
+                                                        <th>平电量</th>
+                                                        <th>谷电量</th>
+                                                        <th>反电量</th>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -135,12 +149,7 @@
             //         });
             // });
             $(document).ready(function() {
-                $('.js-example-basic-single').select2();
-                $('.js-example-basic-multiple').select2();
-
-
-
-                $('#example').DataTable({
+                table = $('#example').DataTable({
                     //显示正在加载
                     "processing": true,
                     //服务器处理
@@ -173,16 +182,21 @@
                         { "data": "datadate" },
                         { "data": "consnamefull" },
                         { "data": "consarea" },
-                        { "data": "pape" }
+                        { "data": "pape" },
+                        { "data": "pape1" },
+                        { "data": "pape2" },
+                        { "data": "pape3" },
+                        { "data": "pape4" },
+                        { "data": "papr" }
                     ],
                     //国际化
                     "language": {
                         "sProcessing": "加载中...",
-                        "sLengthMenu": "显示 _MENU_ 项结果",
+                        "sLengthMenu": "每页显示 _MENU_ 项",
                         "sZeroRecords": "没有匹配结果",
-                        "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-                        "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-                        "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                        "sInfo": "显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项",
+                        "sInfoEmpty": "显示第 0 至 0 项，共 0 项",
+                        "sInfoFiltered": "(由 _MAX_ 项过滤)",
                         "sInfoPostFix": "",
                         "sSearch": "搜索:",
                         "sUrl": "",
@@ -205,6 +219,188 @@
                     //     'copy', 'excel', 'pdf'
                     // ]
                 });
+
+
+                var sel_area = $('#sel_area').select2({
+                    placeholder: '区县',
+                    ajax: {
+                        url: '/api/area_sel',
+                        dataType: 'json',
+                        processResults: function(data) {
+                            // data[0].selected = true
+                            return {
+                                results: data
+                            };
+                        }
+                    }
+                });
+                // sel_area.val('1').trigger('change');
+                $('#sel_consname').select2({
+                    placeholder: '用户名称(可多选)'
+                });
+                $('#sel_consno').select2({
+                    placeholder: '用户编号(可多选)'
+                });
+                $('#sel_area').on('select2:select', function(e) {
+                    var p_data = e.params.data;
+                    console.log(p_data);
+                    $('#sel_consname').select2({
+                        placeholder: '用户名称(可多选)',
+                        ajax: {
+                            url: '/api/consname_sel',
+                            type: 'post',
+                            dataType: 'json',
+                            data: {
+                                'area': p_data['text']
+                            },
+                            processResults: function(data) {
+                                // data[0].selected = true
+                                return {
+                                    results: data
+                                };
+                            }
+                        }
+                    });
+                });
+                $('#sel_consname').on('select2:select', function(e) {
+                    // var p_data = e.params.data;
+                    var p_data = $('#sel_consname').select2('data');
+                    name_list = []
+                    for (i = 0; i < p_data.length; i++) {
+                        name_list[i] = p_data[i].text
+                    }
+                    name_para = JSON.stringify(name_list)
+                    // console.log(p_data)
+                    console.log(name_list);
+                    $('#sel_consno').select2({
+                        placeholder: '用户编号(可多选)',
+                        ajax: {
+                            url: '/api/consno_sel',
+                            type: 'post',
+                            dataType: 'json',
+                            data: {
+                                'name': name_para
+                            },
+                            processResults: function(data) {
+                                // data[0].selected = true
+                                console.log(data);
+                                return {
+                                    results: data
+                                };
+                            }
+                        }
+                    });
+                });
+                $('#btn_query').click(function() {
+                    /* Act on the event */
+                    var area = $('#sel_area').select2('data');
+                    var name = $('#sel_consname').select2('data');
+                    var no = $('#sel_consno').select2('data');
+                    console.log(area);
+                    console.log(name);
+                    console.log(no);
+
+                    if (area.length == 0) {
+                        alert('请选择查询条件！');
+                        return
+                    }
+                    p_area = area[0].text;
+                    p_name = [];
+                    for (i = 0; i < name.length; i++) {
+                        p_name[i] = name[i].text;
+                    }
+                    p_no = [];
+                    for (i = 0; i < no.length; i++) {
+                        p_no[i] = no[i].text;
+                    }
+                    console.log(p_area);
+                    console.log(p_name);
+                    console.log(p_no);
+
+
+                    table.destroy()
+
+                    table = $('#example').DataTable({
+                        //显示正在加载
+                        "processing": true,
+                        //服务器处理
+                        "serverSide": true,
+                        //开启分页
+                        "paging": true,
+                        //分页样式
+                        "pagingType": "full_numbers",
+                        //自定义分页长度
+                        "lengthMenu": [
+                            [10, 20, 50, 100],
+                            ['10', '20', '50', '100']
+                        ],
+                        //开启排序
+                        "ordering": true,
+                        //异步请求数据
+                        "ajax": {
+                            "type": "Post",
+                            "url": "/api/query",
+                            //"dataType": "json"
+                            "data": function(d) {
+                                // d.test = "myValue";
+                                // d.custom = $('#myInput').val();
+                                // etc
+                                d.area = JSON.stringify(p_area);
+                                d.name = JSON.stringify(p_name);
+                                d.no = JSON.stringify(p_no);
+                            }
+                        },
+                        //列对应关系
+                        "columns": [
+                            { "data": "consno" },
+                            { "data": "datadate" },
+                            { "data": "consnamefull" },
+                            { "data": "consarea" },
+                            { "data": "pape" },
+                            { "data": "pape1" },
+                            { "data": "pape2" },
+                            { "data": "pape3" },
+                            { "data": "pape4" },
+                            { "data": "papr" }
+                        ],
+                        //国际化
+                        "language": {
+                            "sProcessing": "加载中...",
+                            "sLengthMenu": "每页显示 _MENU_ 项",
+                            "sZeroRecords": "没有匹配结果",
+                            "sInfo": "显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项",
+                            "sInfoEmpty": "显示第 0 至 0 项，共 0 项",
+                            "sInfoFiltered": "(由 _MAX_ 项过滤)",
+                            "sInfoPostFix": "",
+                            "sSearch": "搜索:",
+                            "sUrl": "",
+                            "sEmptyTable": "表中数据为空",
+                            "sLoadingRecords": "载入中...",
+                            "sInfoThousands": ",",
+                            "oPaginate": {
+                                "sFirst": "首页",
+                                "sPrevious": "上页",
+                                "sNext": "下页",
+                                "sLast": "末页"
+                            },
+                            "oAria": {
+                                "sSortAscending": ": 以升序排列此列",
+                                "sSortDescending": ": 以降序排列此列"
+                            }
+                        },
+                        // "dom": "Bfrtip"
+                        // "buttons": [
+                        //     'copy', 'excel', 'pdf'
+                        // ]
+                    });
+
+
+                });
+
+
+
+
+
                 // var table = $('#example').DataTable();
 
                 // Apply the filter
